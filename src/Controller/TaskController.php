@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Form\CommentType;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,12 +50,20 @@ class TaskController extends Controller
     /**
      * @Route("/{id}", name="task_show", methods="GET")
      */
-    public function show(Task $task, $id)
+    public function show(Task $task, Request $request, $id)
     {
-        $taskRepo = $this->getDoctrine()->getRepository('App:Task');
-        /** @var Task $task */
+        $taskRepo = $this->getDoctrine()->getRepository('Task');
         $task = $taskRepo->find($id);
-        return $this->render('task/show.html.twig', ['task' => $task]);
+        $commentForm = $this->createForm(CommentType::class);
+        $commentForm->handleRequest($request);
+        if ($commentForm->isSubmitted()) {
+            $comment = $commentForm->getData(); //TODO
+        }
+        /** @var Task $task */
+        return $this->render('task/show.html.twig', [
+            'task' => $task,
+ //           'comment_form' => $commentForm->createView(),
+        ]);
     }
 
     /**
@@ -82,7 +91,7 @@ class TaskController extends Controller
      */
     public function delete(Request $request, Task $task): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $task->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($task);
             $em->flush();

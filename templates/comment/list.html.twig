@@ -1,3 +1,7 @@
+<div>
 {% for item in items %}
-    {{ include('comment/teaser.html.twig', {'item': item} ) }}
+    <div>
+        {{ include('comment/teaser.html.twig',{'items': item} ) }}
+    </div>
     {% endfor %}
+</div>
