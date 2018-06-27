@@ -50,10 +50,9 @@ class TaskController extends Controller
     /**
      * @Route("/{id}", name="task_show", methods="GET")
      */
-    public function show(Task $task, Request $request, $id)
+    public function show(Task $task, Request $request)
     {
-        $taskRepo = $this->getDoctrine()->getRepository('Task');
-        $task = $taskRepo->find($id);
+
         $commentForm = $this->createForm(CommentType::class);
         $commentForm->handleRequest($request);
         if ($commentForm->isSubmitted()) {
@@ -62,7 +61,6 @@ class TaskController extends Controller
         /** @var Task $task */
         return $this->render('task/show.html.twig', [
             'task' => $task,
- //           'comment_form' => $commentForm->createView(),
         ]);
     }
 

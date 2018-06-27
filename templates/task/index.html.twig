@@ -5,35 +5,63 @@
 {% block body %}
     <h1>Task index</h1>
 
+    {#   <table class="table">
+           <thead>
+           <tr>
+               <th>Id</th>
+               <th>Name</th>
+               <th>Description</th>
+               <th>Created</th>
+               <th>actions</th>
+               <th>Status</th>
+           </tr>
+           </thead>
+           <tbody>
+           {% for task in tasks %}
+               <tr>
+                   <td>{{ task.id }}</td>
+                   <td>{{ task.name }}</td>
+                   <td>{{ task.description }}</td>
+                   <td>{{ task.created ? task.created|date('Y-m-d H:i:s') : '' }}</td>
+                   <td>
+                       <a href="{{ path('task_show', {'id': task.id}) }}">show</a>
+                       <a href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
+                   </td>
+                   <td>{{ task.status }}</td>
+               </tr>
+           {% else %}
+               <tr>
+                   <td colspan="5">no records found</td>
+               </tr>
+           {% endfor %}
+           </tbody>
+       </table>#}
+
+    <a href="{{ path('task_new') }}">Create new</a>
+
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Created</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>TODO</th>
+            <th>DOING</th>
+            <th>DONE</th>
+        </tr>
         </thead>
         <tbody>
         {% for task in tasks %}
-            <tr>
-                <td>{{ task.id }}</td>
-                <td>{{ task.name }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.created ? task.created|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('task_show', {'id': task.id}) }}">show</a>
-                    <a href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
+            {% if task.status.id  == 1 %}
+                <td><a href="{{ path('task_show', {'id': task.id}) }}">{{ task.name }}</a></td>
+            {% else %}
+            {% endif %}
+            {% if task.status.id  == 2 %}
+                <td><a href="{{ path('task_show', {'id': task.id}) }}">{{ task.name }}</a></td>
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+            {% endif %}
+            {% if task.status.id  == 3 %}
+                <td><a href="{{ path('task_show', {'id': task.id}) }}">{{ task.name }}</a></td>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('task_new') }}">Create new</a>
 {% endblock %}
