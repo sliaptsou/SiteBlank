@@ -78,9 +78,22 @@ class TaskController extends Controller
             return $this->redirectToRoute('task_edit', ['id' => $task->getId()]);
         }
 
+        //Trying to add a comment editing form to a task
+        $em = $this->getDoctrine()->getManager();
+        $commentForm = $this->createForm(CommentType::class);
+        $commentForm->handleRequest($request);
+        if ($commentForm->isSubmitted()) {
+            /** @var Comment $comment */
+            $comment = $commentForm->getData();
+            $comment->setTask($task);
+            $em->persist($comment);
+            $em->flush();
+            return $this->redirectToRoute('task_show', ['id' => $task->getId()]);
+        }
         return $this->render('task/edit.html.twig', [
             'task' => $task,
             'form' => $form->createView(),
+            'comment_form' => $commentForm->createView(),
         ]);
     }
 

@@ -10,4 +10,18 @@
     <a href="{{ path('comment_index') }}">back to list</a>
 
     {{ include('comment/_delete_form.html.twig') }}
+{#    Trying to add a comment editing form to a task#}
+    <h2>Comments</h2>
+    {{ form(comment_form) }}
+    <div class="list">
+    {% for item in page.comments %}
+        <div class="list-item">
+            {{ include('comment/teaser.html.twig', {'item' : item }) }}
+            <ul>
+                <li><a href="{{ path('comment_edit', { 'id' : item.id }) }}">Edit</a></li>
+                <li><a href="{{ path('comment_delete', { 'id' : item.id }) }}">Delete</a></li>
+            </ul>
+        </div>
+    {% endfor %}
+
 {% endblock %}
